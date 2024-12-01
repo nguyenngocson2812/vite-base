@@ -4,11 +4,11 @@ import { Outlet } from 'react-router-dom';
 import Header from './Header/index.jsx';
 function LayoutDefault() {
     return (<>
-        <Header />
-        <main className="main">
-            <Outlet />
-        </main>
-        <Footer />
+            <Header />
+            <main className="main">
+                <Outlet />
+            </main>
+            <Footer />
     </>)
 }
 

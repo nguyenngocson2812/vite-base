@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 
-function index() {
+function Posts() {
     useEffect(() => {
 
     }, []);
@@ -11,4 +11,4 @@ function index() {
     </>)
 }
 
-export default index
+export default Posts;

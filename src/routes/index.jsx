@@ -1,41 +1,20 @@
-import { useRoutes, Outlet, useParams } from "react-router-dom";
-import LayoutDefault from "../layouts/LayoutDefault/LayoutDefault";
-import PrivateRouts from "./PrivateRouts";
-
-function Home() {
-    return <h2>Home Page</h2>; // Changed to "Home Page"
-}
-
-function About() {
-    return (
-        <div>
-            <h2>About Page</h2>
-            <Outlet />
-        </div>
-    );
-}
-
-function About2() {
-    return <h2>About Page 2</h2>;
-}
-
-function Contact() {
-    return (
-        <div>
-            <h2>Contact Page</h2>
-            <Outlet />
-        </div>
-    );
-}
+import LayoutDefault from "../layouts/LayoutDefault/LayoutDefault.jsx";
+import Home from "../pages/Home/index.jsx";
+import About from "../pages/About/index.jsx";
+import About2 from "../pages/About2/index.jsx";
+import Contact from "../pages/Contact/index.jsx";
+import PrivateRoutes from "./PrivateRoutes.jsx";
+import PublicRoutes from "./PublicRoutes.jsx";
+import Register from "../pages/Register/index.jsx";
+import NotFound from "../pages/NotFound/NotFound.jsx";
+import Login from "../pages/Login/index.jsx";
+import {useParams, useRoutes} from "react-router-dom";
 
 function ContactDetail() {
-    const params = useParams();
-    console.log(params);
-    return <h2>ContactDetail Page: {JSON.stringify(params)}</h2>;
-}
-
-function NoPage() {
-    return <h2>404 - Page Not Found</h2>;
+    const value = useParams();
+    return <>
+        {JSON.stringify(value)}
+    </>
 }
 function AppRoutes() {
     const routes = [
@@ -43,30 +22,33 @@ function AppRoutes() {
             path: '/',
             element: <LayoutDefault />,
             children: [
-                { path: '/', element: <Home /> }, // Use '' for the Home route instead of '/'
-                {
-                    path: 'about',
-                    element: <About />,
-                    children: [{ path: 'about2', element: <About2 /> }],
-                },
+                { index: true, element: <Home /> },
+                { path: 'about', element: <About /> },
+                { path: 'about/about2', element: <About2 /> },
                 {
                     path: 'contact',
                     element: <Contact />,
                     children: [{ path: ':id', element: <ContactDetail /> }],
                 },
                 {
-                    element: <PrivateRouts />,
+                    element: <PrivateRoutes />,
                     children: [
-                        {
-                        }
-                    ]
-                }
+                    ],
+                },
             ],
         },
-        { path: '*', element: <NoPage /> }, // Wildcard route for 404
+        {
+            element: <PublicRoutes />,
+            children: [
+                { path: 'login', element: <Login /> },
+                { path: 'register', element: <Register /> },
+            ],
+        },
+        { path: '*', element: <NotFound /> },
     ];
 
     return useRoutes(routes);
 }
 
 export default AppRoutes;
+
