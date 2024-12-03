@@ -1,20 +1,21 @@
-import LayoutDefault from "../layouts/LayoutDefault/LayoutDefault.jsx";
-import Home from "../pages/Home/index.jsx";
-import About from "../pages/About/index.jsx";
-import About2 from "../pages/About2/index.jsx";
-import Contact from "../pages/Contact/index.jsx";
-import PrivateRoutes from "./PrivateRoutes.jsx";
-import PublicRoutes from "./PublicRoutes.jsx";
-import Register from "../pages/Register/index.jsx";
-import NotFound from "../pages/NotFound/NotFound.jsx";
-import Login from "../pages/Login/index.jsx";
-import {useParams, useRoutes} from "react-router-dom";
+// import lib
+import { useParams, useRoutes } from 'react-router-dom';
+
+// import file
+import LayoutDefault from '../layouts/LayoutDefault/LayoutDefault.jsx';
+import Home from '../pages/Home/index.jsx';
+import About from '../pages/About/index.jsx';
+import About2 from '../pages/About2/index.jsx';
+import Contact from '../pages/Contact/index.jsx';
+import PrivateRoutes from './PrivateRoutes.jsx';
+import PublicRoutes from './PublicRoutes.jsx';
+import Register from '../pages/Register/index.jsx';
+import NotFound from '../pages/NotFound/NotFound.jsx';
+import Login from '../pages/Login/index.jsx';
 
 function ContactDetail() {
     const value = useParams();
-    return <>
-        {JSON.stringify(value)}
-    </>
+    return <>{JSON.stringify(value)}</>;
 }
 function AppRoutes() {
     const routes = [
@@ -32,8 +33,7 @@ function AppRoutes() {
                 },
                 {
                     element: <PrivateRoutes />,
-                    children: [
-                    ],
+                    children: [],
                 },
             ],
         },
@@ -51,4 +51,3 @@ function AppRoutes() {
 }
 
 export default AppRoutes;
-

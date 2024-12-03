@@ -1,13 +1,17 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { useSelector } from 'react-redux';
+import { Navigate, Outlet } from 'react-router-dom';
 
 function PrivateRoutes() {
-    const isAuthenticated = true; // Thay bằng logic kiểm tra thực tế
+    const { isLogin, status } = useSelector((state) => state.auth);
+    console.log('isLogin: ', isLogin);
 
-    if (!isAuthenticated) {
-        return <Navigate to="/login" />; // Điều hướng đến login nếu chưa đăng nhập
+    if (isLogin) {
+        return <Outlet />;
     }
-
-    return <Outlet />; // Render các route con nếu đã đăng nhập
+    if (status === 'loading') {
+        return <div>Loading...</div>;
+    }
+    return <Navigate to="/login" />;
 }
 
 export default PrivateRoutes;

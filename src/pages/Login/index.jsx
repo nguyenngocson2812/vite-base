@@ -1,55 +1,49 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { TextField, Button, Container, Typography } from '@mui/material';
-import {Link, useNavigate} from 'react-router-dom'; // for routing to Forgot Password and Register pages
-import { toast } from 'react-toastify'; // Import React-Toastify
-import 'react-toastify/dist/ReactToastify.css'; // Import CSS for Toastify
-import {errorToast, successToast} from '../../utils/toast.js';
-import {emailRegex} from "../../utils/regex.js";
-import Loading from "../../components/Loading/index.jsx";
-import axios from "axios";
-import {loginUser} from "../../api/auth.js";
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../../stores/middlewares/authMiddleware';
+import { errorToast, successToast } from '../../utils/toast';
+import { emailRegex } from '../../utils/regex';
+import Loading from '../../components/Loading';
 
 function Login() {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [token, _] = useState(localStorage.getItem('token'));
-    const [isLoading, setIsLoading] = useState(false);
+    const { isLogin, status } = useSelector((state) => state.auth);
 
-    // Hàm xử lý khi người dùng nhấn submit
-    const handleSubmit = async (e) => {
+    // Navigate to home page if login is successful
+    useEffect(() => {
+        if (isLogin) {
+            successToast('Login successful');
+            navigate('/');
+        }
+    }, [isLogin, navigate]);
+
+    const handleSubmit = (e) => {
         e.preventDefault();
-        setIsLoading(true);
-        if (!email || !password) {
-            errorToast("Email và mật khẩu không được để trống!");
+
+        // Basic validation
+        if (!email.trim() || !password.trim()) {
+            errorToast('Email and password must not be empty!');
             return;
         }
 
-        if (!emailRegex.test(email)) {
-            errorToast("Email không đúng định dạng!");
+        if (!emailRegex.test(email.trim())) {
+            errorToast('Invalid email format!');
+            return;
         }
-        const fetchData = await loginUser(email, password);
-        setIsLoading(false);
 
+        // Dispatch login action
+        dispatch(loginUser({ email: email.trim(), password: password.trim() }));
     };
-    const fetchAuth = async (token) => {
-        const res = await axios.get('https://api-xi-fawn.vercel.app/api/v1/auth/profile',
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
-        successToast("Login success")
-    }
 
-    useEffect(() => {
-        if (token) {
-            fetchAuth(token);
-        }
-    }, []);
-    if(isLoading){
-        return <Loading/>
+    // Show loading spinner while logging in
+    if (status === 'loading') {
+        return <Loading />;
     }
 
     return (
@@ -65,55 +59,39 @@ function Login() {
                         type="email"
                         fullWidth
                         variant="outlined"
-                        className="mb-4"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
-
                     <TextField
                         label="Password"
                         type="password"
                         fullWidth
                         variant="outlined"
-                        className="mb-6"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        fullWidth
-                        type="submit"
-                    >
+                    <Button variant="contained" color="primary" fullWidth type="submit">
                         Log In
                     </Button>
                 </form>
 
-                {/* Forgot Password link */}
+                {/* Forgot Password Link */}
                 <div className="mt-4 text-center">
-                    <Link
-                        to="/forgot-password" // Assuming you have a route for Forgot Password page
-                        className="text-blue-500 hover:underline"
-                    >
+                    <Link to="/forgot-password" className="text-blue-500 hover:underline">
                         Forgot Password?
                     </Link>
                 </div>
 
-                {/* Register link */}
+                {/* Register Link */}
                 <div className="mt-4 text-center">
                     <Typography variant="body2">
-                        Don't have an account?
-                        <Link
-                            to="/register" // Assuming you have a route for Register page
-                            className="text-blue-500 hover:underline"
-                        >
+                        Don&apos;t have an account?{' '}
+                        <Link to="/register" className="text-blue-500 hover:underline">
                             Register
                         </Link>
                     </Typography>
                 </div>
             </div>
-
         </Container>
     );
 }

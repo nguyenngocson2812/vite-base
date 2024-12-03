@@ -7,6 +7,4 @@ export const getPost = createAsyncThunk('getPost',
         return data;
     }
 )
-console.log(getPost.pending());
-console.log(getPost.fulfilled());
-console.log(getPost.rejected());
+    

@@ -3,11 +3,11 @@ import { createSlice } from '@reduxjs/toolkit';
 import { getPost } from '../middlewares/postMiddleware';
 
 const counterSlice = createSlice({
-    name: "counter",
+    name: 'counter',
     initialState: {
         value: 0,
         postList: [],
-        status: 'idle'
+        status: 'idle',
     },
     reducers: {
         increment: (state) => {
@@ -26,16 +26,16 @@ const counterSlice = createSlice({
     // call api
     extraReducers: (builder) => {
         builder.addCase(getPost.fulfilled, (state, action) => {
-            state.status = 'success'
-            state.postList = action.payload
+            state.status = 'success';
+            state.postList = action.payload;
         });
         builder.addCase(getPost.pending, (state, action) => {
-            state.status = 'pending'
+            state.status = 'pending';
         });
         builder.addCase(getPost.rejected, (state, action) => {
-            state.status = 'error'
+            state.status = 'error';
         });
-    }
+    },
 });
 
 export default counterSlice;

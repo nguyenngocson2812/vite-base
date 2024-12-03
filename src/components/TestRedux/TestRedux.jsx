@@ -3,8 +3,11 @@ import counterSlice from "../../stores/slices/counterSlice"
 
 const { incrementByAmount, decrementByAmount } = counterSlice.actions;
 function TestRedux() {
+    // useSelector , useDispatch
     const counter = useSelector(state => state.counter.value);
     const dispatch = useDispatch();
+
+    // dispatch(action)
     const handleDecrement = () => {
         dispatch(decrementByAmount(10));
     }
